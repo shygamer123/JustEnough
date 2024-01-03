@@ -1,0 +1,2 @@
+# JustEnough
+ JustEnough discord bot 

@@ -1,14 +1,21 @@
 require('dotenv').config(); // Load environment variables from .env file
 const Discord = require('discord.js');
 const fs = require('fs');
-const md= require("mongoose")
+const mongoose= require("mongoose")
 const client = new Discord.Client();
 const prefix = process.env.PREFIX || '!';
+const User = require('./models/user'); // Adjust the path based on your project structure
 
 
-md.connect(process.env.mongoose,{
-    useNewUrlParser: true
-})
+const md= mongoose.connection;
+mongoose.connect(process.env.mongoose,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+mongoose.connection.on('error', err => {
+    console.log(err);
+  });
+
 client.on('ready', () => {
     console.log(`Logged in successfully!\nAs ${client.user.tag}`);
     

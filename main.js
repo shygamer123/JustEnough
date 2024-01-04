@@ -1,10 +1,14 @@
 require('dotenv').config(); // Load environment variables from .env file
 const Discord = require('discord.js');
 const fs = require('fs');
-
+const md= require("mongoose")
 const client = new Discord.Client();
 const prefix = process.env.PREFIX || '!';
 
+
+md.connect(process.env.mongoose,{
+    useNewUrlParser: true
+})
 client.on('ready', () => {
     console.log(`Logged in successfully!\nAs ${client.user.tag}`);
     

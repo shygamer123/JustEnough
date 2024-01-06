@@ -1,10 +1,8 @@
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 const Discord = require('discord.js');
 const fs = require('fs');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const path = require('path');
-const sharp = require('sharp');
-const Tesseract = require('node-tesseract-ocr');
 
 try {
   const md = mongoose.connection;
@@ -16,6 +14,7 @@ try {
   mongoose.connection.on('error', err => {
     console.log(err);
   });
+
 } catch (error) {
   console.error('Error occurred while connecting to MongoDB:', error);
 }
@@ -50,7 +49,7 @@ try {
     client.commands.set(command.name, command);
   }
 
-  client.on('messageCreate', async (message) => {
+  client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -67,7 +66,6 @@ try {
       message.reply('There was an error executing the command!');
     }
   });
-
 
   client.login(process.env.TOKEN);
 } catch (error) {

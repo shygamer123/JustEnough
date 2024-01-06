@@ -2,6 +2,7 @@ require('dotenv').config(); // Load environment variables from .env file
 const Discord = require('discord.js');
 const fs = require('fs');
 const mongoose = require("mongoose");
+const path = require('path');
 
 try {
   const md = mongoose.connection;
@@ -30,7 +31,8 @@ try {
 
     if (channel) {
       try {
-        channel.send('Started the bot successfully!');
+        channel.send('Started the bot successfully!')
+          .catch(error => console.error('Error occurred while sending message:', error));
       } catch (error) {
         console.error('Error occurred while sending message:', error);
       }
@@ -40,21 +42,12 @@ try {
   });
 
   client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
+  const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-for (const file of commandFiles) {
-  const command = require(`./src/commands/${file}`);
-  client.commands.set(command.name, command);
-}
-
-client.events = new Discord.Collection();
-const eventFiles = fs.readdirSync('./src/events').filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-  const event = require(`./src/events/${file}`);
-  client.events.set(event.name, event);
-}
-
+  for (const file of commandFiles) {
+    const command = require(path.join(__dirname, 'commands', file));
+    client.commands.set(command.name, command);
+  }
 
   client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
